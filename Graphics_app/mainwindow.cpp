@@ -32,9 +32,69 @@ MainWindow::MainWindow(QWidget *parent)
     view->setBackgroundBrush(QColor(200, 200, 200));
     this->setCentralWidget(view);
     text_item->setFocus();
+
+    // SIGNALS AND SLOTS
+    connect(ui->actionZoom_In, &QAction::triggered, this, &MainWindow::ZoomIn);
+    connect(ui->actionZoom_Out, &QAction::triggered, this, &MainWindow::ZoomOut);
+
+    // CUT COPY PASTE SELECT ALL....
+    connect(ui->actionCut, &QAction::triggered, this, &MainWindow::cut_text);
+    connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy_text);
+    connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste_text);
+    connect(ui->actionSelect_All, &QAction::triggered, this, &MainWindow::select_all);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::ZoomIn()
+{
+    if(zoomFactor < 3.0)
+    {
+        zoomFactor *= 1.2;
+        view->scale(1.2, 1.2);
+    }
+}
+
+void MainWindow::ZoomOut()
+{
+    if (zoomFactor > 0.5)
+    {  // Min zoom level
+        zoomFactor /= 1.2;
+        view->scale(1 / 1.2, 1 / 1.2);
+    }
+}
+
+void MainWindow::cut_text() // IMPLEMENTATION OF METHOD IS VERY HARD HERE.......!!!!!!!!!!!!!!!!!!!!!!
+{
+    if(QGraphicsTextItem *text_item = getFocusTextItem())
+    {
+        // text_item->cut();
+    }
+}
+
+void MainWindow::copy_text()
+{
+
+}
+
+void MainWindow::select_all()
+{
+
+}
+
+QGraphicsTextItem *MainWindow::getFocusTextItem()
+{
+    if(QGraphicsItem *item = ui->graphicsView->scene()->focusItem())
+    {
+        return dynamic_cast<QGraphicsTextItem*>(item);
+    }
+    return nullptr;
+}
+
+void MainWindow::paste_text()
+{
+
 }
